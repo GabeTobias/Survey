@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form List</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+
+  <script defer>
+    function QuestionTypeChange(elem) {
+      let optionBar = document.getElementById(`${elem.dataset.index}-Type`);
+      optionBar.hidden = !(elem.value == "Multiple Choice");
+    }
+
+    function QuestionAddOption(elem){
+      let optionGroup = document.getElementById(`${elem.dataset.index}-Options`);
+      optionGroup.innerHTML += `
+        <input type="text" class="form-control mt-2" aria-label="Text input with dropdown button"
+          placeholder="Option..." name="${elem.dataset.index}-Options" form="saveForm">
+      `;
+    }
+  </script>
+</head>
+
+<body>
+  <div class="container mt-4">
+
+    <h3><%= survey.Title %></h3>
+    <p><%= survey.Description %></p>
+
+    <hr class="mb-4 mt-4">
+
+    <form id="deleteForm" action="../deleteQuestion" method="post"></form>
+    <form id="saveForm" action="../postSurvey" method="POST"></form>
+
+    <input type="hidden" form="deleteForm" value="<%= survey._id %>" name="surveyID">
+    <input type="hidden" form="saveForm" value="<%= survey._id %>" name="surveyID">
+
+    <% survey.Questions.forEach(function(question, index){ %>
+      
+      <div class="card mb-4">
+        <div class="card-body">
+          <h6 class="float-start mb-3"> Question <%= index+1 %> </h6>
+          <button type="submit" value="<%= index %>" name="deleteIndex" class="btn link-danger btn-link float-end" style="margin-top: -0.75rem;" form="deleteForm">Delete</button>
+            <div class="input-group">
+              <input type="text" class="form-control" aria-label="Text input with dropdown button"
+              placeholder="Question..." value="<%= question.Text %>" name="<%= `${index}-Question` %>" form="saveForm">
+              <select class="form-select" aria-label="Default select example" data-index="<%= index %>" name="<%= `${index}-Type` %>" form="saveForm" onchange="QuestionTypeChange(this)">
+                <option value="Short Text" selected>Short Text</option>
+                <option value="Long Text">Long Text</option>
+                <option value="Integer">Number</option>
+                <option value="Multiple Choice">Multiple Choice</option>
+              </select>
+            </div>
+            
+          </div>          
+          <div class="card-footer pt-0" id="<%= `${index}-Type` %>" <%= (question.Options.length > 0) ? "":"hidden" %> >
+            <div id="<%= `${index}-Options` %>" class="px-1" style="max-height: 12rem; overflow-y: scroll;">
+              <% question.Options.forEach(function(option, optNum){ %>
+                <input type="text" class="form-control mt-2" aria-label="Text input with dropdown button"
+                  placeholder="Option..." value="<%= option %>" name="<%= `${index}-Options` %>" form="saveForm">
+              <% }); %>
+            </div>
+            <button type="button" data-index="<%= index %>" class="btn btn-outline-success btn-sm mb-2 mt-3" onclick="QuestionAddOption(this)">Add Option</a>
+          </div>
+        </div>
+
+    <% }); %>
+
+    <button type="submit" class="btn btn-success float-end mb-4">Done</button>
+
+    <!-- TODO: This should probably be done with ajax -->
+    <form action="../addQuestion" method="post">
+      <input type="hidden" value="<%= survey._id %>" name="surveyID">
+      <button type="submit" class="btn btn-success">New Question</button>
+    </form>
+  </div>
+
+</body>
+
+</html>
