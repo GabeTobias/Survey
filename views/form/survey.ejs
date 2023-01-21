@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= Title %></title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+
+</head>
+<body>
+  <div class="container mt-5">
+    <h3><%= Title %></h3>
+    <p><%= Description %></p>
+
+    <hr class="mb-4 mt-4">
+
+    <form action="<%= `${SurveyID}/complete` %>" method="post">
+      <% Questions.forEach( (question, index) => { %>
+        <div class="card mb-4">
+          <div class="card-header pt-3">
+            <h6><%= index+1 %>. <%= question.Text %></h6>
+          </div>
+          <div class="card-body">
+            
+            <% if(question.Type == "Short Text"){ %>
+              <input type="text" class="form-control" aria-label="Text input with dropdown button"
+              placeholder="Short Answer..." name="<%= `Question-${index}` %>">
+            <% } else if(question.Type == "Long Text"){ %>
+              <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
+              placeholder="Long Answer..." name="<%= `Question-${index}` %>"></textarea>
+            <% } else if(question.Type == "Integer"){ %>
+              <input type="range" class="form-range" id="customRange1" name="<%= `Question-${index}` %>">
+            <% } else if(question.Type == "Multiple Choice"){ %>
+              <select class="form-select" aria-label="Default select example" name="<%= `Question-${index}` %>">
+                <% question.Options.forEach( (option, optNum) => { %>
+                  <option value="<%= option %>"><%= option %></option>
+                <% }); %>
+              </select>
+            <% } %>
+
+          </div>
+        </div>
+      <% }); %>
+
+      <a href="<%= `${SurveyID}/cancel` %>" class="btn btn-outline-danger float-end mb-5">Cancel</a>
+      <button type="submit" class="btn btn-success">Complete</button>
+    </form>
+
+  </div>
+</body>
+</html>

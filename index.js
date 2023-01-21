@@ -12,7 +12,7 @@ const authRoutes = require('./routes/auth');
 app.use(express.urlencoded());
 
 app.use(adminRoutes);
-// app.use(formRoutes);
+app.use(formRoutes);
 // app.use(authRoutes);
 
 app.set('view engine', 'ejs');
