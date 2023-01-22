@@ -12,29 +12,56 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
     crossorigin="anonymous"></script>
+
+  <script defer>
+    function CreateMenu(){
+      document.getElementById('createForm').hidden = false;
+      document.getElementById('createToggle').hidden = true;
+    }
+  </script>
 </head>
 
 <body>
-  <!-- <p>
-    <%= surveys %>
-  </p> -->
-
   <div class="container mt-4">
 
-    <h3>Your Surveys</h3>
+    <div class="row">
+      <div class="column"><h3>Your Surveys</h3></div>
+      <div class="column">
+        <a href="/logout" class="link-secondary float-end" style="margin-top: -2rem;">Logout</a>
+      </div>
+    </div>
 
-    <hr class="mb-4">
+    <hr class="">
 
     <% surveys.forEach(function(survey){ %>
-      <div class="card">
+      <div class="card mt-4">
         <div class="card-body">
           <h5 class="card-title"><%= survey.Title %></h5>
           <p class="card-text"><%= survey.Description %></p>
           <a href="/admin/survey/<%= survey._id %>" class="btn btn-success">View</a>
-          <a class="btn btn-outline-danger">Delete</a>
+          <a href="/admin/deleteSurvey/<%= survey._id %>" class="btn btn-outline-danger">Delete</a>
         </div>
       </div>
     <% }); %>
+
+    <form action="/admin/createSurvey" method="post">
+      <div class="card mt-4" id="createForm" hidden>
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="surveyName" class="form-label">Survey Name</label>
+            <input type="text" class="form-control" id="surveyName" name="surveyName" placeholder="Name...">
+          </div>
+          <div class="mb-3">
+            <label for="surveyDescription" class="form-label">Survey Description</label>
+            <textarea class="form-control" id="surveyDescription" name="surveyDescription"  placeholder="Description..." rows="3"></textarea>
+          </div>
+
+          <button class="btn btn-outline-secondary" type="submit">Create</button>
+        </div>
+      </div>
+      
+      <button type="button" id="createToggle" onclick="CreateMenu()" class="btn btn-outline-success mt-4">New Survey</button>
+    </form>
   </div>
 
 </body>

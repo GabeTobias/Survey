@@ -2,13 +2,15 @@ const express = require('express');
 
 const router = express.Router();
 
-const { formList, surveyPage, PostSurvey, AddQuestion, DeleteQuestion } = require('../controllers/admin');
+const { formList, surveyPage, PostSurvey, AddQuestion, DeleteQuestion, SurveyVerification, CreateSurvey, DeleteSurvey } = require('../controllers/admin');
 
-router.get('/admin', formList);
-router.get('/admin/survey/:id', surveyPage);
-router.post('/admin/postSurvey', PostSurvey);
-router.post('/admin/addQuestion', AddQuestion);
-router.post('/admin/deleteQuestion', DeleteQuestion);
+router.get('/', formList);
+router.get('/survey/:id', SurveyVerification, surveyPage);
+router.get('/deleteSurvey/:id', SurveyVerification, DeleteSurvey);
+router.post('/createSurvey', CreateSurvey);
+router.post('/postSurvey', PostSurvey);
+router.post('/addQuestion', AddQuestion);
+router.post('/deleteQuestion', DeleteQuestion);
 
 
 module.exports = router;

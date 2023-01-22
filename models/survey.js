@@ -39,6 +39,10 @@ const Survey = new Schema({
     type: String,
     required: true
   },
+  Creator: {
+    type: String,
+    required: true
+  },
   Questions: {
     type: [Question],
     required: true

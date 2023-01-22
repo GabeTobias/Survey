@@ -4,8 +4,8 @@ const router = express.Router();
 
 const { getForm, postResults, cancelForm } = require('../controllers/form');
 
-router.get('/:id', getForm);
-router.get('/:id/cancel', cancelForm);
-router.post('/:id/complete', postResults);
+router.get('/Survey/:id', getForm);
+router.get('/Survey/:id/cancel', cancelForm);
+router.post('/Survey/:id/complete', postResults);
 
 module.exports = router;

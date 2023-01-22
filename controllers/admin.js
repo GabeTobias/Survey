@@ -2,12 +2,23 @@ const { Survey } = require('../models/survey');
 
 
 exports.formList = async (req, res) => {
-  let surveys = await Survey.find();
+  console.log("Loaded");
+  let surveys = await Survey.find({ Creator: req.session.user.Email });
 
   res.render('admin/dashboard.ejs', {
     surveys
   });
 };
+
+exports.SurveyVerification = async (req, res, next) => {
+  const survey = await Survey.findById(req.params.id);
+  
+  if(survey.Creator != req.session.user.Email){
+    return res.redirect('/admin');
+  }
+
+  next();
+}
 
 exports.surveyPage = async (req, res) => {
   let survey = await Survey.findById(req.params.id);
@@ -15,6 +26,27 @@ exports.surveyPage = async (req, res) => {
   res.render('admin/survey.ejs', {
     survey
   });
+};
+
+exports.CreateSurvey = async (req, res) => {
+  let form = req.body;
+  let survey = new Survey({ 
+    Title: form.surveyName, 
+    Description: form.surveyDescription,
+    Creator: req.session.user.Email
+  });
+
+  await survey.save();
+  
+  res.redirect(`/admin/survey/${survey._id}`);
+};
+
+exports.DeleteSurvey = async (req, res) => {
+  let survey = await Survey.findById(req.params.id);
+
+  survey.delete();
+
+  res.redirect('/admin');
 };
 
 exports.PostSurvey = async (req, res) => {
