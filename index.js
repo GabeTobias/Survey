@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const MongoDBStore = require('connect-mongodb-session')(session);
@@ -12,6 +13,7 @@ const adminRoutes = require('./routes/admin');
 const authRoutes = require('./routes/auth');
 const formRoutes = require('./routes/form');
 
+app.use('/scripts',express.static(path.join(__dirname, 'scripts')));
 app.use(
   session({
       resave: false,

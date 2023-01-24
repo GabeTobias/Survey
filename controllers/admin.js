@@ -20,10 +20,23 @@ exports.SurveyVerification = async (req, res, next) => {
   next();
 }
 
+exports.SurveyJSON = async (req, res) => {
+  const survey = await Survey.findById(req.params.id);
+  res.send(JSON.stringify(survey));
+};
+
 exports.surveyPage = async (req, res) => {
   let survey = await Survey.findById(req.params.id);
 
   res.render('admin/survey.ejs', {
+    survey
+  });
+};
+
+exports.ResultsPage = async (req, res) => {
+  let survey = await Survey.findById(req.params.id);
+
+  res.render('admin/results.ejs', {
     survey
   });
 };
